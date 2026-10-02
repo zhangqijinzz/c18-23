@@ -11,7 +11,7 @@ export default [
     languageOptions: {
       parser: tsParser,
       parserOptions: { ecmaFeatures: { jsx: true }, sourceType: 'module' },
-      globals: { window: 'readonly', document: 'readonly', localStorage: 'readonly', Blob: 'readonly', URL: 'readonly' },
+      globals: { window: 'readonly', document: 'readonly', localStorage: 'readonly', Blob: 'readonly', URL: 'readonly', KeyboardEvent: 'readonly', HTMLElement: 'readonly', HTMLButtonElement: 'readonly', HTMLInputElement: 'readonly', Event: 'readonly' },
     },
     plugins: { '@typescript-eslint': tseslint, 'react-hooks': reactHooks },
     rules: {

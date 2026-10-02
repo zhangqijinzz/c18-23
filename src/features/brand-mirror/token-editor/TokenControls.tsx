@@ -1,4 +1,5 @@
 import type { BrandMirrorSnapshot, BrandTheme } from '../models/brandMirrorModels'
+import { HistoryPanel } from '../history/HistoryPanel'
 
 interface TokenControlsProps {
   snapshot: BrandMirrorSnapshot
@@ -6,6 +7,9 @@ interface TokenControlsProps {
   onColorChange: (field: 'primary' | 'secondary', value: string) => void
   onScaleChange: (field: 'radiusScale' | 'spacingScale' | 'typeScale', index: number, value: number) => void
   onReset: () => void
+  onUndo: () => void
+  onRedo: () => void
+  onJumpHistory: (index: number) => void
 }
 
 const themes: { id: BrandTheme; label: string; note: string }[] = [
@@ -14,7 +18,7 @@ const themes: { id: BrandTheme; label: string; note: string }[] = [
   { id: 'night', label: 'Night signal', note: '锐利 · 数字' },
 ]
 
-export function TokenControls({ snapshot, onThemeChange, onColorChange, onScaleChange, onReset }: TokenControlsProps) {
+export function TokenControls({ snapshot, onThemeChange, onColorChange, onScaleChange, onReset, onUndo, onRedo, onJumpHistory }: TokenControlsProps) {
   return (
     <aside className="control-panel">
       <div className="panel-heading">
@@ -53,6 +57,8 @@ export function TokenControls({ snapshot, onThemeChange, onColorChange, onScaleC
       <ScaleControl label="圆角尺度" hint="px" values={snapshot.tokens.radiusScale} field="radiusScale" onChange={onScaleChange} />
       <ScaleControl label="间距体系" hint="px" values={snapshot.tokens.spacingScale} field="spacingScale" onChange={onScaleChange} />
       <ScaleControl label="字体比例" hint="px" values={snapshot.tokens.typeScale} field="typeScale" onChange={onScaleChange} />
+
+      <HistoryPanel snapshot={snapshot} onUndo={onUndo} onRedo={onRedo} onJump={onJumpHistory} />
 
       <div className="panel-footer"><span className="live-dot" />所有调整实时同步到预览</div>
     </aside>
