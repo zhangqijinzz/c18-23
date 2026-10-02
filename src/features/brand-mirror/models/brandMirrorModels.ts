@@ -16,11 +16,37 @@ export interface SavedVersion {
   createdAt: string
 }
 
+/** 历史中的一个检查点：只记录可撤销的工作区内容（令牌 + 主题），版本列表是追加式里程碑，不参与撤销 */
+export interface HistoryCheckpoint {
+  tokens: BrandTokens
+  theme: BrandTheme
+}
+
+/** 一条历史步骤；label 是该步骤进入的状态描述，如「主色 · #123456」 */
+export interface HistoryEntry {
+  label: string
+  at: number
+  checkpoint: HistoryCheckpoint
+}
+
+export interface EditHistory {
+  past: HistoryEntry[]
+  present: HistoryEntry
+  future: HistoryEntry[]
+}
+
 export interface BrandDocument {
   version: 1
   tokens: BrandTokens
   theme: BrandTheme
   versions: SavedVersion[]
+  history: EditHistory
+}
+
+export interface HistoryStep {
+  id: string
+  label: string
+  at: number
 }
 
 export interface BrandMirrorSnapshot {
@@ -33,6 +59,11 @@ export interface BrandMirrorSnapshot {
   contrastRatio: number
   contrastWarning: boolean
   message: string
+  canUndo: boolean
+  canRedo: boolean
+  /** 按时间顺序排列的全部历史步骤（past → 当前 → future） */
+  historySteps: HistoryStep[]
+  currentHistoryId: string | null
 }
 
 export const INITIAL_TOKENS: BrandTokens = {
@@ -61,3 +92,6 @@ export const THEME_PRESETS: Record<BrandTheme, { label: string; tokens: BrandTok
     },
   },
 }
+
+export const HISTORY_LIMIT = 50
+export const COALESCE_WINDOW_MS = 800
